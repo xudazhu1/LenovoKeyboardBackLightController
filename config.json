@@ -1,5 +1,7 @@
 {
   "startup": false,
   "close_behavior": "minimize",
-  "last_mode": "HIGH"
+  "last_mode": "HIGH",
+  "needRefreshDevice": false,
+  "refreshDevice": "ACPI\\VEN_TIAS&DEV_2781&SUBSYS_17AA38BE"
 }

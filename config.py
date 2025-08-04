@@ -1,14 +1,25 @@
 import json
 import os
+import sys
 
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
+
+if getattr(sys, 'frozen', False):
+    # 如果是 PyInstaller 打包后的程序
+    exe_path = sys.executable
+else:
+    # 否则是脚本运行
+    exe_path = os.path.abspath(__file__)
+
+CONFIG_PATH = os.path.join(os.path.dirname(exe_path), "config.json")
 
 
 def load_config():
     default_config = {
         "startup": False,
         "close_behavior": "ask",  # 可为 ask / exit / minimize
-        "last_mode": "HIGH"
+        "last_mode": "HIGH",
+        "needRefreshDevice": False,  # 刷新声卡驱动 修复声卡异常的问题
+        "refreshDevice": r"ACPI\VEN_TIAS&DEV_2781&SUBSYS_17AA38BE"  # 刷新声卡驱动 修复声卡异常的问题
     }
     if not os.path.exists(CONFIG_PATH):
         save_config(default_config)
@@ -17,7 +28,8 @@ def load_config():
         with open(CONFIG_PATH, "r", encoding="utf-8") as f:
             config = json.load(f)
         return {**default_config, **config}
-    except Exception:
+    except Exception as e:
+        print(e)
         return default_config
 
 
